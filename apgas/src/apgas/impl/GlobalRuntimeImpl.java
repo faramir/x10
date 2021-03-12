@@ -211,6 +211,12 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
           .filter(a -> a.startsWith("--add-")) // --add-opens --add-exports ...
           .forEach(command::add);
         
+        // or:
+        // for suppress warnings from kryo
+        //command.addAll(List.of("--add-opens=java.base/java.nio=ALL-UNNAMED",
+        //                       "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+        //                       "--add-opens=java.base/java.io=ALL-UNNAMED"));
+        
         for (final String property : System.getProperties()
             .stringPropertyNames()) {
           if (property.startsWith("apgas.")) {
@@ -398,6 +404,12 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
             .stream()
             .filter(a -> a.startsWith("--add-"))  // --add-opens --add-exports ...
             .forEach(command::add);
+          
+          // or:
+          // for suppress warnings from kryo
+          //command.addAll(List.of("--add-opens=java.base/java.nio=ALL-UNNAMED",
+          //                       "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+          //                       "--add-opens=java.base/java.io=ALL-UNNAMED"));
           
           for (final String property : System.getProperties()
               .stringPropertyNames()) {
