@@ -182,7 +182,8 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
       if (master == null && p > 1) {
         if (launcherName != null) {
           try {
-            launcher = (Launcher) Class.forName(launcherName).newInstance();
+            launcher = (Launcher) Class.forName(launcherName)
+                                    .getDeclaredConstructor().newInstance();
           } catch (InstantiationException | IllegalAccessException
               | ExceptionInInitializerError | ClassNotFoundException
               | NoClassDefFoundError | ClassCastException e) {
@@ -241,7 +242,7 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
         final String finishFactoryName = finishName + "$Factory";
         try {
           factory = (Finish.Factory) Class.forName(finishFactoryName)
-              .newInstance();
+                                      .getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException
             | ExceptionInInitializerError | ClassNotFoundException
             | NoClassDefFoundError | ClassCastException e) {
