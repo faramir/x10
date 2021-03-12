@@ -187,7 +187,8 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
               | ExceptionInInitializerError | ClassNotFoundException
               | NoClassDefFoundError | ClassCastException e) {
             System.err.println("[APGAS] Unable to instantiate launcher: "
-                + launcherName + ". Using default launcher.");
+                + launcherName + ": " + e + ". "
+                + "Using default launcher.");
           }
         }
         if (launcher == null) {
@@ -201,10 +202,9 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
         final ArrayList<String> command = new ArrayList<String>();
         command.add(java);
         command.add("-Duser.dir=" + System.getProperty("user.dir"));
-        command.add("-Xbootclasspath:"
-            + ManagementFactory.getRuntimeMXBean().getBootClassPath());
         command.add("-cp");
         command.add(System.getProperty("java.class.path"));
+
         for (final String property : System.getProperties()
             .stringPropertyNames()) {
           if (property.startsWith("apgas.")) {
@@ -269,7 +269,7 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
               host = h;
               break;
             }
-          } catch (final UnknownHostException e) {
+          } catch (final UnknownHostException ignored) {
           }
         }
       }
@@ -277,7 +277,6 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
         host = localhost;
       }
       {
-        // removing port part from IPv4 addresses
         int lastIndex;
         if ((lastIndex = host.lastIndexOf(':')) > 0
                 && lastIndex == host.indexOf(':')) {
@@ -303,7 +302,7 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
             ip = inetAddress.getHostAddress();
           }
         }
-      } catch (final IOException e) {
+      } catch (final IOException ignored) {
       }
 
       // check first entry of hostfile
@@ -383,10 +382,9 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
           final ArrayList<String> command = new ArrayList<String>();
           command.add(java);
           command.add("-Duser.dir=" + System.getProperty("user.dir"));
-          command.add("-Xbootclasspath:"
-              + ManagementFactory.getRuntimeMXBean().getBootClassPath());
           command.add("-cp");
           command.add(System.getProperty("java.class.path"));
+
           for (final String property : System.getProperties()
               .stringPropertyNames()) {
             if (property.startsWith("apgas.")) {
