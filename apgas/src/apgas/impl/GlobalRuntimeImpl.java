@@ -205,6 +205,12 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
         command.add("-cp");
         command.add(System.getProperty("java.class.path"));
 
+        ManagementFactory.getRuntimeMXBean()
+          .getInputArguments()
+          .stream()
+          .filter(a -> a.startsWith("--add-")) // --add-opens --add-exports ...
+          .forEach(command::add);
+        
         for (final String property : System.getProperties()
             .stringPropertyNames()) {
           if (property.startsWith("apgas.")) {
@@ -245,6 +251,8 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
       }
 
       // initialize scheduler
+      ForkJoinPool.class.getModule().addOpens(ForkJoinPool.class.getPackage().getName(), this.getClass().getModule());
+      
       pool = new ForkJoinPool(maxThreads, new WorkerFactory(), null, false);
       final Field ctl = ForkJoinPool.class.getDeclaredField("ctl");
       ctl.setAccessible(true);
@@ -385,6 +393,12 @@ public final class GlobalRuntimeImpl extends GlobalRuntime {
           command.add("-cp");
           command.add(System.getProperty("java.class.path"));
 
+          ManagementFactory.getRuntimeMXBean()
+            .getInputArguments()
+            .stream()
+            .filter(a -> a.startsWith("--add-"))  // --add-opens --add-exports ...
+            .forEach(command::add);
+          
           for (final String property : System.getProperties()
               .stringPropertyNames()) {
             if (property.startsWith("apgas.")) {
